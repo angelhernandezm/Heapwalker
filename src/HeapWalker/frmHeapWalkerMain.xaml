@@ -1,0 +1,45 @@
+﻿<Window x:Class="HeapWalker.frmHeapWalkerMain"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Heap Walker" Height="485.86" Width="587" ResizeMode="NoResize" Loaded="Window_Loaded">
+	<Window.Resources>
+		<XmlDataProvider x:Key="xmlHeapData" IsAsynchronous="True" XPath="/HeapWalker/Process/Heap"/>
+		<XmlDataProvider x:Key="xmlBlockData" IsAsynchronous="True"/>
+	</Window.Resources>
+	<Grid  Name="grdMain" Height="422" Width="538.733">
+		<Label Height="28" HorizontalAlignment="Left" Margin="17.148,15.719,0,0" Name="lblProcessName" VerticalAlignment="Top" Width="120">Process Name:</Label>
+		<ComboBox Height="23" Margin="110.033,20.719,138.613,0" Name="cboProcessName" VerticalAlignment="Top"  SelectionChanged="cboProcessName_SelectionChanged"/>
+		<Button Height="23" HorizontalAlignment="Right" Margin="0,20.719,26,0" Name="btnRefreshProcessList" VerticalAlignment="Top" Width="75" Click="btnRefreshProcessList_Click">Refresh</Button>
+		<Button Click="btnSaveHeaps_Click" Height="23" HorizontalAlignment="Right" Margin="0,51,27,0" Name="btnSaveHeaps" VerticalAlignment="Top" Width="75">Save Heaps</Button>
+		<Grid Margin="24.293,85,25.722,196" Name="grdHeapNodes">
+			<ListView Margin="11.432,10.003,11.432,8.574" Name="lstHeapNodes"  SelectionChanged="lstHeapNodes_SelectionChanged"
+					 ItemsSource="{Binding Source={StaticResource xmlHeapData} }">
+				<ListView.View>
+					<GridView x:Name="grdHeaps">
+						<GridViewColumn Header="Heap Index" x:Name="grcHeapIndex" Width="100" DisplayMemberBinding="{Binding XPath=@index}"/>
+						<GridViewColumn Header="Base Address" x:Name="grcBaseAddress" Width="100" DisplayMemberBinding="{Binding XPath=@baseAddress}"/>
+						<GridViewColumn Header="Blocks" x:Name="grcBlocks" Width="100" DisplayMemberBinding="{Binding XPath=@blocks}" />
+					</GridView>
+				</ListView.View>
+			</ListView>
+		</Grid>
+		<Grid Margin="24.293,0,25.722,25" Name="grdHeapBlocks" Height="150.045" VerticalAlignment="Bottom">
+			<ListView Margin="11.432,10.003,11.432,8.574" Name="lstHeapBlocks"  MouseDoubleClick="lstHeapBlocks_MouseDoubleClick"
+					 ItemsSource="{Binding Source={StaticResource xmlBlockData} }">
+				<ListView.View>
+					<GridView x:Name="grdBlocks">
+						<GridViewColumn Header="Block Index" x:Name="grcBlockIndex" Width="100" DisplayMemberBinding="{Binding XPath=@index}"/>
+						<GridViewColumn Header="Block Address" x:Name="grcBlockAddress" Width="100" DisplayMemberBinding="{Binding XPath=@blockAddress}"/>
+						<GridViewColumn Header="Block Size" x:Name="grcBlockSize" Width="100" DisplayMemberBinding="{Binding XPath=@blockSize}" />
+					</GridView>
+				</ListView.View>
+			</ListView>
+		</Grid>
+		<Label Height="28" HorizontalAlignment="Left" Margin="18.577,58.589,0,0" Name="lblHeapNodes" VerticalAlignment="Top" Width="204.347">Heap Nodes of the selected Process</Label>
+		<Label Height="28" HorizontalAlignment="Left" Margin="18.577,0,0,171" Name="lblHeapBlocks" VerticalAlignment="Bottom" Width="215.779">Heap Blocks within the selected Node</Label>
+		<MediaElement Margin="240,58,0,0" Name="imgHeapLoad" Stretch="Fill" Height="16" HorizontalAlignment="Left" VerticalAlignment="Top" Width="16" />
+		<MediaElement Height="16" HorizontalAlignment="Right" Margin="0,0,282.733,177" Name="imgBlockLoad" Stretch="Fill" VerticalAlignment="Bottom" Width="16"/>
+		<Label Height="28" HorizontalAlignment="Right" Margin="0,0,22,-11"  Foreground="Blue" Name="lblAbout"  MouseLeftButtonUp="lblAbout_LeftClick" VerticalAlignment="Bottom" Width="120" Cursor="Hand" FontStyle="Oblique">  
+			<Underline>About HeapWalker</Underline></Label>
+	</Grid>
+</Window>
